@@ -24,7 +24,7 @@
 # On ubuntu 18.04
 
 
-CFLAGS := -g -Wall -Werror
+CFLAGS := -O3 -Wall -Werror
 
 primes.o_CPPFLAGS := $(shell python3-config --includes) -DMAIN
 
