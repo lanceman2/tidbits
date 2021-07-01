@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -ex
+
+cd $(dirname ${BASH_SOURCE[0]})
+
+source config.bash
+
+
+# The sha512sum is optional.  Get its value by running:
+#    sha512sum openldap.tar.gz
+
+sha512sum=
+
+case "$TAG" in
+
+    "OPENLDAP_REL_ENG_2_4_46")
+        sha512sum="\
+6ad3a6a4e6e9ec70271f302aa76e2b70323a76accfc2e77285ed6984645\
+003f7d9615abb6b7cb547e66477051d2bba19c297e0c89eba7de196223e\
+57b19b0bb6"
+        ;;
+esac
+
+
+##############################################################
+
+
+source ./GetSrcFromGithub.bash
+
+#Usage: GetSrcFromGithub user package tag tarname [sha512sum]
+
+GetSrcFromGithub openldap openldap $TAG openldap $sha512sum

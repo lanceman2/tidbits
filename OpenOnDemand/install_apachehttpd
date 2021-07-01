@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# lots of bash run options:
+set -xEeuo pipefail
+
+cd $(dirname ${BASH_SOURCE[0]})
+
+topdir=$PWD
+
+source config
+
+
+rm -rf $HTTPD_TARNAME
+
+if [ ! -f $HTTPD_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $HTTPD_TARURL $HTTPD_TARNAME
+else
+    tar -xJf $HTTPD_TARNAME.tar.xz
+fi
+
+if [ ! -f $APR_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $APR_TARURL $APR_TARNAME
+fi
+if [ ! -f $APRUTIL_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $APRUTIL_TARURL $APRUTIL_TARNAME
+fi
+
+
+# add sources apr and apr-util
+cd $HTTPD_TARNAME/srclib
+tar -xJf ../../$APR_TARNAME.tar.xz
+mv $APR_TARNAME apr
+tar -xJf ../../$APRUTIL_TARNAME.tar.xz
+mv $APRUTIL_TARNAME apr-util
+cd $topdir/$HTTPD_TARNAME
+
+./buildconf
+
+./configure\
+ --prefix=${HTTPD_PREFIX}\
+ --enable-mods-static="\
+proxy\
+ watchdog\
+ slotmem_shm\
+ heartmonitor\
+ auth-basic\
+ authn-core\
+ authn-file\
+ authz-user\
+ headers\
+ unixd\
+ env\
+ http\
+ proxy-http\
+ session\
+ lua\
+ dir\
+ autoindex\
+ authz-core\
+ cgi\
+ cgid\
+ alias\
+ mime\
+ http2\
+ htpasswd\
+ ssl\
+ vhost-alias\
+ rewrite\
+ info\
+ mime-magic\
+ status\
+ setenvif\
+ authz-core\
+ access\
+ usertrack\
+ so\
+ log-config\
+ alias\
+"\
+ --with-nghttp2\
+ --with-mpm=worker
+
+
+make -j $NPROC
+make install
+
+# Particular to my system
+cat << EOF > $HTTPD_PREFIX/encap.exclude
+build
+cgi-bin
+conf
+error
+htdocs
+icons
+logs
+manual
+modules
+EOF
+
+
+set +x
+
+echo "---------------------------------------------------"
+echo -e "\nSUCCESSFULLY installed $HTTPD_TARNAME"
+echo -e "\n In ${HTTPD_PREFIX}\n"
+echo "---------------------------------------------------"

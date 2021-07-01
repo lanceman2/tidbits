@@ -1,0 +1,754 @@
+###########################################################################
+# CHAT example
+# note we us a sub bash shell so we can redirect stderr.
+
+cd bin
+
+./termRun
+
+./termRun "./crts_radio\
+ --io readline [ --send-prefix '(from 192.168.10.2)> '\
+ --prompt 'input > '  ] --uhd-args\
+ addr=192.168.10.2\
+ -f 915.5  -F 914.5 2> xxx2"
+
+./termRun "./crts_radio\
+ --uhd-args addr=192.168.10.4\
+ -F 915.5  -f 914.5\
+ --io readline [ --send-prefix '(from 192.168.10.4)> '\
+ --prompt 'input > ' ]\
+ 2> xxx4"
+
+
+###########################################################################
+# Muli Chat with 3 rotating frequencies and smaller bandwidth (rate).
+
+cd bin
+
+./termRun
+
+
+./termRun "./crts_radio\
+ -f 914.5 -F 915.5 -r 0.5 -R 0.5\
+ --io readline\
+ [ --send-prefix '(from 192.168.10.2)> '\
+ --prompt 'input> ' ]\
+ --uhd-args addr=192.168.10.2\
+ 2> xxx2"
+
+
+# USRP 192.168.10.3 does not transmit
+
+
+./termRun "./crts_radio\
+ -f 915.5 -F 915 -r 0.5 -R 0.5\
+ --io readline\
+ [ --send-prefix '(from 192.168.10.3)> '\
+ --prompt 'input> ' ]\
+ --uhd-args addr=192.168.10.3\
+ 2> xxx3"
+
+
+./termRun "./crts_radio\
+ -f 915 -F 914.5 -r 0.5 -R 0.5\
+ --io readline\
+ [ --send-prefix '(from 192.168.10.4)> '\
+ --prompt 'input> ' ]\
+ --uhd-args addr=192.168.10.4\
+ 2> xxx4"
+
+
+
+###########################################################################
+
+#  -- FFT monitor, urandom transmitter, receiver
+
+cd bin
+
+./termRun # to reset the terminal y offset
+
+./termRun 'uhd_fft -f 915.0e6 -s 10.5e6 --args addr=192.168.10.3'
+
+./termRun './crts_radio --uhd-args addr=192.168.10.2 -F 915.5 -o null < /dev/urandom'
+
+./termRun './crts_radio --uhd-args addr=192.168.10.4 -f 915.5 -i null | hexdump'
+
+
+#############################################################################
+
+#  -- FFT monitor, urandom transmitter/receiver, urandom transmitter/receiver
+
+
+cd bin
+
+./termRun
+
+./termRun uhd_fft -f 915.0e6 -s 10.5e6 --args addr=192.168.10.3
+
+./termRun "./crts_radio --uhd-args addr=192.168.10.2 -f 915.5 -F 914.5 < /dev/urandom | hexdump -v"
+
+./termRun "./crts_radio --uhd-args addr=192.168.10.4 -F 915.5 -f 914.5 < /dev/urandom | hexdump -v"
+
+###########################################################################
+
+
+# Muli Chat with fixed send freq and fixed receive freq
+# Only one "chat" can send at a time.  We use the default send and receive
+# frequencies.  THIS FAILS TO WORK!!  They must be polluting each others
+# E/M waves.
+
+term='mate-terminal --hide-menubar'
+
+$term --geometry 98x18+19+191 -x\
+ bash -c 'crts_radio --io readline [ --send-prefix "(from 192.168.10.2)> "\
+ --prompt "input > "  ] --uhd-args\
+ addr=192.168.10.2\
+ 2> xxx2'
+
+$term --geometry 98x18+19+561 -x\
+ bash -c 'crts_radio --uhd-args addr=192.168.10.3\
+ --io readline [ --send-prefix "(from 192.168.10.3)> "\
+ --prompt "input > " ]\
+ 2> xxx3'
+
+$term --geometry 98x18+19+931 -x\
+ bash -c 'crts_radio --io readline [ --send-prefix "(from 192.168.10.4)> "\
+ --prompt "input > "  ] --uhd-args\
+ addr=192.168.10.4\
+ 2> xxx4'
+
+###########################################################################
+
+
+QUESTIONS:
+
+  Can you have more than one process with a uhd::usrp::multi_usrp::sptr
+  object that is connected to one USRP?
+
+      Looks like even if both programs do not TX and RX, it still does not
+      work.
+
+
+TODO LIST:
+
+
+ - add  RadioIO/tun.cpp
+
+
+ - Add demo launcher
+
+   so IN bin/GNUmakefile
+   
+crts_mkTUN_SOURCES :=\
+ crts_mkTUN.cpp\
+ get_opt.cpp\
+ ../lib/tun_alloc.cpp\
+ ../lib/debug.c
+
+
+and 
+
+ - RadioIO/tun.cpp uses it.
+
+
+
+ 
+
+
+
+ - find a way to stop crts_radio from trying to control a radio
+   that already is being controlled with the UHD library.  Remember
+   the USRPs can be controlled from different computers too.
+
+ - crts_radio --io tun TUN_NAME
+
+ - crts_mkTAP
+
+ - crts_radio --io tap TAP_NAME  ??
+
+
+ - use the tx_header sequence counter.
+
+
+ - run modes:
+
+
+
+ADD DEPEND: apt-get install libreadline-dev
+
+
+
+Ideas:
+  - crts_radio ECHO service  Reads RX and writes to TX what it read from
+      RX.
+
+
+    * doing echo service would require a shared buffer between the RX and
+      TX.  Q: Do we just echo the liquid frame or the user data.  I'm
+      guessing that we'll get better results if we reframe the data at
+      the echo relay crts_radio process.
+
+    * separate RX and TX threads or have them act in one thread doing
+      read then write.
+
+
+
+
+  - LinuxBrew install this stuff.  libfec, liquid-dsp, crts, and finally cornet3d
+
+     * make it use a user requested "PREFIX" and what not.
+
+
+  - apt install this stuff...
+
+  - a CRTS simulator...
+
+  
+  - socat is like nc on steroids
+
+  https://blog.rootshell.be/2010/10/31/socat-another-network-swiss-army-knife/
+  
+  * crts needs to be like socat
+
+   I/O data channels:
+
+    a file
+    a pipe
+    a device (ex: a serial line, /dev/urandom)
+    a socket (IPv4, IPv6, raw, TCP, UDP, SSL)
+    a FD (STDIN, STDOUT)
+    a program or script
+
+
+
+
+liquid-usrp : Software-Defined Radio, USRP applications
+https://github.com/jgaeddert/liquid-usrp
+
+
+
+Tasks for Jagadish:
+
+  - get a github account with a user image, and setup your SSH keys.
+
+
+  - Setup a GNU/Linux, Debain 9, work station for yourself, if you have nothing
+    you can use junk from my home.
+
+
+  - Find list of all required deb packages for:
+
+      https://github.com/vtwireless/cornet3d.git
+      https://github.com/lanceman2/cornet.git
+
+
+  - LinuxBrew install of libfec, and liquid-dsp with libfec.
+
+
+
+Discussion with Jagadish:
+
+  - rule of thumb: minimize exposed interfaces
+  - 4 spaces per tab (current CRTS 2 tab is unreadable)
+  - never check in DOS files.
+  - never check in code files without perfect formatting.
+  - use magic 0 not NULL and so on for C++.  bla=0;
+  - use pass by reference
+  - I'm put off by the UHD API and the use of boost.
+  - liquid-dsp is very clean and well documented compared to the UHD API.
+  - don't use boost.
+
+  - show Jagadish 
+
+  - current approach to rewriting CRTS is a harvest, I tried a inserting
+    approach and that doesn't seem to make sense now.  There are too many
+    things wrong with the current CRTS.
+
+  - doing nothing is always more efficient than doing anything
+
+
+  - build a Debian 9 box and install UHD and so on...
+
+  - list the minimum required deb packages needed to install lanceman2
+    cornet repo
+
+  - install LinuxBrew
+
+     * make a LinuxBrew package of libfec
+
+  - study CRTS  --- find race conditions in CRTS??
+
+                --- What's the basic idea of it?
+
+                --- What scenarios should it be able to do?
+
+
+
+
+
+apt-get install libboost-all-dev libusb-1.0-0-dev python-mako doxygen python-docutils cmake build-essential
+
+cd uhd_git
+git clone git://github.com/EttusResearch/uhd.git
+cd uhd/
+# checkout tag release_003_010_002_000
+git checkout release_003_010_002_000
+mkdir host/build
+cd host/build
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local/encap/uhd-release_003_010_002_000 ..
+make VERBOSE=1
+make install VERBOSE=1
+# This installs the same version as installed from apt-get (2017 Nov 01)
+
+
+
+https://kb.ettus.com/UHD
+
+http://files.ettus.com/manual/index.html
+
+What is I/Q Data?
+http://www.ni.com/tutorial/4805/en/
+
+
+Eric Sollenberger general CRTS code architecture diagram:
+https://docs.google.com/a/vt.edu/drawings/d/1XHLT2V0WmBUiPNMZbItNNgJUcqgBPcCYqzCVCt2w2oM/edit?usp=sharing
+
+Eric Sollenberger CRTS Extensible Cognitive Radio code architecture diagram:
+https://docs.google.com/a/vt.edu/drawings/d/11Qdzfk_QSXVCAk0fFxufO1s2OF2mQwYOtX6nsMqg4T0/edit?usp=sharing
+
+
+#UHD on git hub:
+https://github.com/EttusResearch/uhd
+#run
+apt-get install libuhd-dev
+
+#run
+uhd_find_devices 
+
+linux; GNU C++ version 6.3.0 20170221; Boost_106200; UHD_003.009.005-0-unknown
+
+--------------------------------------------------
+-- UHD Device 0
+--------------------------------------------------
+Device Address:
+    type: usrp2
+    addr: 192.168.10.4
+    name: 
+    serial: F3C223
+
+
+--------------------------------------------------
+-- UHD Device 1
+--------------------------------------------------
+Device Address:
+    type: usrp2
+    addr: 192.168.10.2
+    name: 
+    serial: F44901
+
+
+--------------------------------------------------
+-- UHD Device 2
+--------------------------------------------------
+Device Address:
+    type: usrp2
+    addr: 192.168.10.3
+    name: 
+    serial: E0R24N9UP
+
+
+
+
+
+htop -p PID1 -p PID2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The developers of CRTS C++ code did not bother to limit the exposure of
+interfaces in the code, i.e. it's not modular.  It's a highly integrated
+blob of code.  There is some attempt at modularity by the naming of
+objects, but they tend to expose the guts of the objects.  Why do we
+need to include so many stupid CRTS header files?  Ans: You don't
+if you design it in a sane manner.
+
+
+ ----------------- Unused code!!! --------------
+grep reset_fs -r .
+
+
+
+CognitiveEngine is the base class for user control of the usrp.
+There is a single CognitiveEngine object in a single ExtensibleCognitiveRadio object
+in the crts_cognitive_radio process.
+
+
+So CognitiveEngine is the only user interface.  Only one exists for a
+given crts_cognitive_radio run.
+
+The ExtensibleCognitiveRadio object could can be absorbed into the
+crts_cognitive_radio process code, because it is always made once, and
+exists in the bulk of the duration of the crts_cognitive_radio process,
+and is only created at startup and destroyed just before
+crts_cognitive_radio exits.
+
+The ExtensibleCognitiveRadio object is a thread pool container ...
+It has 3 child threads in addition to the parent (master) thread.
+It manages the threads and the thread synchronization. 
+
+
+BUG: race at start
+There is nothing that insures that the ce thread is at the starting line:
+crts_cognitive_radio.cpp: 812
+    ECR->start_ce();  -> pthread_cond_signal(&CE_cond); without knowing
+    if the ce thread is waiting.
+looks like ECR->start_rx() and ECR->start_tx() have insurance.
+
+
+
+BUG: race
+ExtensibleCognitiveRadio::update_tx_params()
+has a nasty race condition that will not necessary keep the users parameter changes
+in the consistent state.
+
+BUG: race
+ExtensibleCognitiveRadio::~ExtensibleCognitiveRadio()
+calls pthread_cond_signal() without the corresponding mutex lock so there
+is nothing assuring that there is a thread waiting, so where the threads
+call pthread_cond_wait() the threads could wait forever.
+
+BUG: coding fart crts_cognetive_radio.cpp: 865
+variable send_return is never set from sendto()
+
+Bad UI design: ExtensibleCognitiveRadio extensible_cognitive_radio.hpp
+exposes far to many things to the CE writer.  It's clearly just
+haphazardly written.  The coder did not know what user interface is.
+
+BUG?: extensible_cognitive_radio.cpp: 409
+ uhd_msg_handler() assumes that the UHD has a message string
+ that is just "O", "D", and "U".  I doubt that any "messages" are just one
+ character.  So if that is the case, CRTS will never detect UHD_OVERFLOW
+ or UHD_UNDERRUN.
+
+
+DEAD CODE: extensible_cognitive_radio.cpp: 1739 - 1766
+
+
+FOOBAR: extensible_cognitive_radio.cpp
+The code never bothers to get the Actual TX/RX frequencies and bandwidth.
+Maybe Eric know that UHD can set all frequencies that they are setting.
+I don't think so...
+
+
+The measures need to have one source and stream.  Currently measures are
+generated in many places in the code even though they are the same
+measures.   
+
+
+The uhd and liquid-dsp framing objects are in the ExtensibleCognitiveRadio object
+
+
+Notes on
+The Program "crts_cognitive_radio" is the program that reads and writes the
+usrp.
+
+
+ExtensibleCognitiveRadio::CE_fftw_mutex has no reason to exist, unless
+either ofdmflexframesync_create() or ofdmflexframegen_destroy() are not
+thread safe.
+
+
+The ce outer loop has no reason to exist.  It needs to be replaced with
+a thread start barrier.
+
+
+
+ECR Threads:   tx  rx  ce  main
+
+
+ce
+
+loop flag
+    wait(CE_cond, CE_mutex)
+
+
+    loop flag
+        timedwait(CE_execute_sig, CE_mutex)
+            execute()
+
+
+
+
+
+
+rx
+
+loop flag
+    wait(rx_cond), rx_params_mutex)
+
+        loop flag
+            usrp->recv()
+            ofdmflexframesync_execute()
+                -> output to tun or whatever
+                -> ce raw complex float buffer
+                       signal(CE_execute_sig)
+
+
+tx
+
+loop flag
+    wait(tx_cond, tx_params_mutex)
+
+        loop flag
+            n = readn(input tun or whatever)
+            usrp->send(ofdmflexframegen(n))
+
+
+
+
+main
+
+connect to controller
+
+controller_socket.recv("COMMANDS")
+apply_control()
+controller_socket.send(feed_back)
+
+controller_socket.write("READY")
+
+
+loop flag
+
+    loop while recv
+        controller_socket.recv("COMMANDS")
+        apply_control()
+        controller_socket.send(feed_back)
+
+    
+    
+    
+
+    
+
+
+
+ExtensibleCognitiveRadio::~ExtensibleCognitiveRadio()
+    set tx_thread_running = false and signal(tx_cond)
+    
+
+
+-------------------- CHECK LIST -----------------
+
+we need to use:
+
+uhd::usrp::multi_usrp::get_usrp_rx_info()
+
+
+
+
+-------------------- NEW DESIGN -------------------
+
+
+crts_radio  --in (spec the input file) --out (spec the file out) --ce cognitiveEngine.so
+
+
+
+Example 0: one way transfer (with no feedback)
+
+
+
+    host 1 with USRP 1 run:
+
+         crts_radio --in /dev/urandom --ce write_file_043
+
+
+    host 2 with USRP 2 run:
+
+         crts_radio --out out_file --ce read_file_043
+
+
+
+
+Example 1: transfer a regular file as fast as possible
+
+
+    transfer a file from in_file to out_file using 2 USRPs
+
+    host 1 with USRP 1 run:
+
+         crts_radio --in in_file --ce write_file_043
+
+
+    host 2 with USRP 2 run:
+
+         crts_radio --out out_file --ce read_file_043
+
+
+
+Example 2: transfer as much data as possible in a period of time
+
+
+    crts_randGenerator is a program that writes data
+
+    host 1 with USRP 1 run:
+
+        crts_randGenerator --out UXIXSocket_file
+
+        crts_radio --in UNIXSocket_file --ce writeFast_043
+
+
+    host 2 run with USRP 2 run:
+
+        crts_radio --ce readFast_043
+
+
+
+
+Example 3:  Example 2 plus sending the other direction
+
+
+    This is like the current CRTS.
+
+
+    crts_randGenerator is a program that writes to UNIX domain socket
+
+    host 1 with USRP 1 run:
+
+        randGenerator --out UXIXSocket_file0
+
+        crts_radio --in UNIXSocket_file0 --ce readWriteFast_043
+
+
+    host 2 run with USRP 2 run:
+
+        randGenerator --out UXIXSocket_file1
+
+        crts_radio --in UXIXSocket_file1 --ce readWriteFast_043
+
+
+
+Example 4: provide a full duplex UDP/IP relay
+
+
+    nc is the netcat program.  See man netcat.
+
+
+    host 1 with USRP 1 run:
+
+
+        crts_mkTUNWithAddress tun55 10.0.0.2
+
+        crts_radio --in tun55 --out tun55 --ce readWriteUDP_043 &
+
+        # This is an interactive program that reads and writes 10.0.0.2:5445
+        nc -up 5454
+
+
+    host 2 with USRP 2 run:
+
+        # if this is a different computer the TUN device name and the IP4
+        # address would not be required to be different than tun55 and
+        # 10.0.0.2 respectively.
+
+        crts_mkTUNWithAddress tun56 10.0.0.3
+
+        crts_radio --in tun56 --out tun55 --ce readWriteUDP_043 &
+
+        # This is an interactive program that reads and writes 10.0.0.3:5444
+        nc -ulp 5444
+
+
+
+Example 5: play "real time" sound passed through USRPs
+
+
+Example 6: browser service passed through USRPs
+
+
+
+    host 1 with USRP 1 run:
+
+
+        crts_mkTUNWithAddress tun55 10.0.0.2
+
+        crts_radio --in tun55 --out tun55 --ce readWriteTCP_043 &
+
+        # This is an interactive program that reads and writes 10.0.0.2:5445
+        httpd --bla --bla --bla 10.0.0.2:5445
+
+
+    host 2 with USRP 2 run:
+
+        # if this is a different computer the TUN device name and the IP4
+        # address would not be required to be different than tun55 and
+        # 10.0.0.2 respectively.
+
+        crts_mkTUNWithAddress tun56 10.0.0.3
+
+        crts_radio --in tun55 --out tun56 --ce readWriteTCP_043 &
+
+        # This is an interactive program that reads and writes 10.0.0.3:5444
+        firefox  http://10.0.0.3:5444
+
+
+
+Example 7:  using UNIX pipes
+
+
+        randGenerator --out - | crts_radio --in - --ce readWriteFast_043
+
+
+
+
+Example 8: in to out; a relay
+
+
+        crts_radio --in out
+        
+
+Example 9:  contest
+
+
+
+    host 1 with USRP 1:
+
+        # reads and writes full duplex UNIX domain socket, and monitors
+        crts_contestDataTransmitterReceiver UXIXSocket_file1
+
+        crts_radio --in UXIXSocket_file1 --out UXIXSocket_file1
+
+
+
+    host 2 with USRP 2:
+
+        # reads and writes full duplex UNIX domain socket, and monitors
+        crts_contestDataTransmitterReceiver UXIXSocket_file2
+
+        crts_radio --in UXIXSocket_file2 --out UXIXSocket_file2
+
+
+
+
+
+
+Parameters CE can set via the ECR object
+
+
+
+TX                              RX
+
+
+
+

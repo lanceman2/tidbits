@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# Convert a markdown file to HTML via the github.com web API
+# ref: https://developer.github.com/v3/markdown/
+
+function Usage()
+{
+    cat << EOF
+
+  Usage: $0 INFILE.md [-p|--preview]
+
+    You should not have to push your markdown files to github to see if
+    they will look good on github, hence this...
+
+    Convert a markdown file to HTML via the github.com web API
+      ref: https://developer.github.com/v3/markdown/
+
+    Reads markdown file INFILE.md and prints to stdout the HTML generated
+    by using curl and the github.com web API.  So one would expect that
+    the resulting generated HTML will be the same as the HTML you view
+    from your github repo web pages after you push your files.  This also
+    prints to info stderr.
+
+
+                        OPTION
+
+
+      -p|--preview       preview the HTML in the default browser
+
+
+EOF
+
+    exit 1
+}
+
+[ -z "$1" ] && Usage
+[[ "$1" == -* ]] && Usage
+
+run="curl -X POST -H Content-Type:text/x-markdown\
+ https://api.github.com/markdown/raw --data-binary @$1"
+
+file=
+
+if [ -n "$2" ] ; then
+    file=$(mktemp --suffix .html) || exit 1
+fi
+
+
+
+# curl -bla -bla | tee file
+#   or
+# curl -bla -bla
+
+function delayCleanup()
+{
+    # Browsers are slow to load files, so we need to wait before removing
+    # the temp file.  We have no simple way to know how long to wait,
+    # so we background the call of this command so it will not make us
+    # wait to this to finish sleeping and removing the temporary file.
+    sleep 8 # Seems like a reasonable time to wait.
+    rm $file
+    #echo "cleaned up"
+}
+
+
+if [ -n "$file" ] ; then
+    $run | tee $file
+    # open file in browser
+    xdg-open $file
+    ret=$?
+    delayCleanup &
+    # In this case success is not determined from the last command ran.
+    exit $?
+else
+    $run
+fi

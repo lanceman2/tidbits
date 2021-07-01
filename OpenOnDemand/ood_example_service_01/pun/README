@@ -1,0 +1,3 @@
+This is the Root directory that contains the PUN (Per User Nignx) Unix
+sockets that the proxy uses the PUN to apache.
+ref: https://osc.github.io/ood-documentation/master/architecture.html

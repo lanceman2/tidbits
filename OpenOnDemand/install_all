@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# lots of bash run options to catch many different failures:
+set -xEeo pipefail
+
+
+function postInstall() {
+    # CONFIGURE HERE
+    # NOTE: the "sudo encap" is particular to my system.
+    # Replace with your system specific post installation script.
+    # To be called between installation of package that the next
+    # package depends on.
+    sudo encap
+    # END CONFIGURE HERE
+}
+
+
+# Run in this directory
+cd $(dirname ${BASH_SOURCE[0]})
+
+# Usage: CheckRun SCRIPT [POST_SCRIPT]
+function CheckRun() {
+    if [ ! -e $1.done ] ; then
+        $1
+        date > $1.done
+        if [ -n "$2" ] ; then
+            $2
+        fi
+    fi
+}
+
+
+function root_apt_install() {
+    sudo ./root_apt_install
+}
+
+
+CheckRun root_apt_install
+CheckRun ./install_nghttp2 postInstall
+CheckRun ./install_apachehttpd
+CheckRun ./install_nginx
+CheckRun ./install_node
+CheckRun ./install_ruby
+CheckRun ./install_slurm
+postInstall
+CheckRun ./install_ondemand
+
+
+
+cat << EOF
+
+
+  ######################################################################
+  ###########                   SUCCESS                     ############
+  ###########                                               ############
+                finished running: $0
+  ######################################################################
+
+EOF
+

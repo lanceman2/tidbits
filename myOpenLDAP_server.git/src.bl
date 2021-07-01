@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -ex
+
+
+source config.bash
+
+topdir=$PWD
+
+# Do not run this if we already did.
+[ -f $topdir/src/SUCCESS ] && exit 0
+
+rm -rf src
+
+tar -xzmf openldap.tar.gz
+
+mv openldap-openldap-* src
+
+cd src
+
+
+./configure --prefix=$PREFIX
+make -j$(nproc||4)
+
+set +x
+
+# We really need to know: Did we succeed and make it this far in this
+# script?
+echo "The script ../$0 ran SUCCESSFULLY" > $topdir/src/SUCCESS

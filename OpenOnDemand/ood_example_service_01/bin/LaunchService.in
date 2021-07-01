@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# lots of bash run options:
+set -xEeo pipefail
+
+cd $(dirname $(readlink -e ${BASH_SOURCE[0]}))
+
+function usage() {
+
+    cat << EOF
+
+  Usage: $0 start|checkConf
+
+
+EOF
+    exit 1
+}
+
+# The apache httpd server root is one directory up.
+cd ..
+
+httpd="@HTTPD_PREFIX@/bin/httpd"
+
+if [ ! -x "$httpd" ] ; then
+    echo -e "\n\nhttpd program: $httpd was not found\n\n"
+    exit 1
+fi
+
+function checkConf() {
+    tmpFile=$(mktemp)
+    ret=0
+    if ! $httpd -d . -e debug -E $tmpFile -t ; then
+        cat $tmpFile
+        ret=1
+    fi
+    rm -f $tmpFile
+    exit $ret
+}
+
+if [ -z "$1" ] || [ -n "$2" ] ; then
+    usage
+fi
+
+case "$1" in
+
+    checkConf)
+        checkConf
+        ;;
+    start)
+        $httpd -d . -e debug -X
+        ;;
+    *)
+        usage
+esac
+

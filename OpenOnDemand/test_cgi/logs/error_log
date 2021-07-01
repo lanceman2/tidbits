@@ -1,0 +1,77 @@
+[Thu Sep 19 09:01:53.917949 2019] [ssl:info] [pid 9405:tid 140069018717952] AH01883: Init: Initialized OpenSSL library
+[Thu Sep 19 09:01:53.922679 2019] [ssl:info] [pid 9405:tid 140069018717952] AH01883: Init: Initialized OpenSSL library
+[Thu Sep 19 09:01:53.922699 2019] [ssl:warn] [pid 9405:tid 140069018717952] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Thu Sep 19 09:01:53.922825 2019] [lbmethod_heartbeat:notice] [pid 9405:tid 140069018717952] AH02282: No slotmem from mod_heartmonitor
+[Mon Sep 23 09:41:10.856925 2019] [ssl:info] [pid 10430:tid 140346416598784] AH01883: Init: Initialized OpenSSL library
+[Mon Sep 23 09:41:10.861765 2019] [ssl:info] [pid 10430:tid 140346416598784] AH01883: Init: Initialized OpenSSL library
+[Mon Sep 23 09:41:10.861793 2019] [ssl:warn] [pid 10430:tid 140346416598784] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Mon Sep 23 09:41:10.861941 2019] [lbmethod_heartbeat:notice] [pid 10430:tid 140346416598784] AH02282: No slotmem from mod_heartmonitor
+[Mon Sep 23 09:41:10.862267 2019] [core:warn] [pid 10430:tid 140346416598784] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:20:55.181059 2019] [ssl:info] [pid 19032:tid 140560808455936] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:20:55.197154 2019] [ssl:info] [pid 19032:tid 140560808455936] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:20:55.197177 2019] [ssl:warn] [pid 19032:tid 140560808455936] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:20:55.197328 2019] [lbmethod_heartbeat:notice] [pid 19032:tid 140560808455936] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:20:55.197667 2019] [core:warn] [pid 19032:tid 140560808455936] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:22:38.180529 2019] [ssl:info] [pid 19328:tid 140263150243584] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:22:38.185486 2019] [ssl:info] [pid 19328:tid 140263150243584] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:22:38.185512 2019] [ssl:warn] [pid 19328:tid 140263150243584] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:22:38.185657 2019] [lbmethod_heartbeat:notice] [pid 19328:tid 140263150243584] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:22:38.185958 2019] [core:warn] [pid 19328:tid 140263150243584] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:24:34.931837 2019] [ssl:info] [pid 19496:tid 139674425364224] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:24:34.936836 2019] [ssl:info] [pid 19496:tid 139674425364224] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:24:34.936856 2019] [ssl:warn] [pid 19496:tid 139674425364224] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:24:34.936975 2019] [lbmethod_heartbeat:notice] [pid 19496:tid 139674425364224] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:24:34.937255 2019] [core:warn] [pid 19496:tid 139674425364224] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:27:55.346643 2019] [ssl:info] [pid 19614:tid 140611344686848] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:27:55.351468 2019] [ssl:info] [pid 19614:tid 140611344686848] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:27:55.351488 2019] [ssl:warn] [pid 19614:tid 140611344686848] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:27:55.351610 2019] [lbmethod_heartbeat:notice] [pid 19614:tid 140611344686848] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:27:55.351896 2019] [core:warn] [pid 19614:tid 140611344686848] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:32:46.553035 2019] [ssl:info] [pid 19744:tid 140035069263616] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:32:46.557666 2019] [ssl:info] [pid 19744:tid 140035069263616] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:32:46.557685 2019] [ssl:warn] [pid 19744:tid 140035069263616] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:32:46.557811 2019] [lbmethod_heartbeat:notice] [pid 19744:tid 140035069263616] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:32:46.558123 2019] [core:warn] [pid 19744:tid 140035069263616] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:33:58.793311 2019] [ssl:info] [pid 19882:tid 139646881914624] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:33:58.798439 2019] [ssl:info] [pid 19882:tid 139646881914624] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:33:58.798460 2019] [ssl:warn] [pid 19882:tid 139646881914624] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:33:58.798584 2019] [lbmethod_heartbeat:notice] [pid 19882:tid 139646881914624] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:33:58.798893 2019] [core:warn] [pid 19882:tid 139646881914624] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:34:19.552452 2019] [ssl:info] [pid 19976:tid 140020448624384] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:34:19.557682 2019] [ssl:info] [pid 19976:tid 140020448624384] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:34:19.557703 2019] [ssl:warn] [pid 19976:tid 140020448624384] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:34:19.557833 2019] [lbmethod_heartbeat:notice] [pid 19976:tid 140020448624384] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:34:19.558133 2019] [core:warn] [pid 19976:tid 140020448624384] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:34:30.855967 2019] [ssl:info] [pid 20063:tid 140290061504256] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:34:30.861327 2019] [ssl:info] [pid 20063:tid 140290061504256] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:34:30.861348 2019] [ssl:warn] [pid 20063:tid 140290061504256] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:34:30.861471 2019] [lbmethod_heartbeat:notice] [pid 20063:tid 140290061504256] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:34:30.861760 2019] [core:warn] [pid 20063:tid 140290061504256] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:38:47.175231 2019] [ssl:info] [pid 20205:tid 140449956486912] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:38:47.180592 2019] [ssl:info] [pid 20205:tid 140449956486912] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:38:47.180612 2019] [ssl:warn] [pid 20205:tid 140449956486912] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:38:47.180761 2019] [lbmethod_heartbeat:notice] [pid 20205:tid 140449956486912] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:38:47.181039 2019] [core:warn] [pid 20205:tid 140449956486912] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:38:53.036503 2019] [cgid:error] [pid 20205:tid 140449373017856] [client ::1:35794] AH01265: attempt to invoke directory as script: /home/lance/git/OpenOnDemand/test_cgi/cgi/
+[Tue Sep 24 09:39:08.871942 2019] [cgid:error] [pid 20205:tid 140449364625152] [client ::1:35796] malformed header from script 'hello.cgi': Bad header: hi
+[Tue Sep 24 09:42:47.117846 2019] [ssl:info] [pid 20361:tid 140588658478848] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:42:47.122773 2019] [ssl:info] [pid 20361:tid 140588658478848] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:42:47.122795 2019] [ssl:warn] [pid 20361:tid 140588658478848] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:42:47.122936 2019] [lbmethod_heartbeat:notice] [pid 20361:tid 140588658478848] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:42:47.123257 2019] [core:warn] [pid 20361:tid 140588658478848] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:44:45.412783 2019] [ssl:info] [pid 20468:tid 140033485373184] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:44:45.417813 2019] [ssl:info] [pid 20468:tid 140033485373184] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:44:45.417835 2019] [ssl:warn] [pid 20468:tid 140033485373184] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:44:45.417965 2019] [lbmethod_heartbeat:notice] [pid 20468:tid 140033485373184] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:44:45.418258 2019] [core:warn] [pid 20468:tid 140033485373184] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:45:14.403446 2019] [cgid:error] [pid 20468:tid 140032895407872] [client ::1:35820] AH01265: attempt to invoke directory as script: /home/lance/git/OpenOnDemand/test_cgi/cgi/
+[Tue Sep 24 09:45:58.613768 2019] [ssl:info] [pid 20569:tid 140391047044864] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:45:58.618558 2019] [ssl:info] [pid 20569:tid 140391047044864] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:45:58.618580 2019] [ssl:warn] [pid 20569:tid 140391047044864] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:45:58.618707 2019] [lbmethod_heartbeat:notice] [pid 20569:tid 140391047044864] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:45:58.619036 2019] [core:warn] [pid 20569:tid 140391047044864] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?
+[Tue Sep 24 09:46:07.964816 2019] [ssl:info] [pid 20656:tid 140049143070464] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:46:07.969731 2019] [ssl:info] [pid 20656:tid 140049143070464] AH01883: Init: Initialized OpenSSL library
+[Tue Sep 24 09:46:07.969751 2019] [ssl:warn] [pid 20656:tid 140049143070464] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Tue Sep 24 09:46:07.969875 2019] [lbmethod_heartbeat:notice] [pid 20656:tid 140049143070464] AH02282: No slotmem from mod_heartmonitor
+[Tue Sep 24 09:46:07.970162 2019] [core:warn] [pid 20656:tid 140049143070464] AH00098: pid file ./logs/httpd.pid overwritten -- Unclean shutdown of previous Apache run?

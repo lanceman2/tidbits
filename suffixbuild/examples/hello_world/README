@@ -1,0 +1,27 @@
+
+  To build:
+
+     1. make sure that quickbuild is built in ../..
+        by running 'make' in ../.. or 'make -C ../..'
+        from in this directory
+
+     2. run '../../quickbuild' from this directory
+
+     3. run 'make' from this directory
+
+     
+     
+     
+     
+     Put another way just run:
+
+       make -C ../.. && ../../quickbuild && make
+
+     from this directory.
+
+
+
+  'GNUmakefile' in the directory above lets you build all the example
+  packages by running 'make' in the directory above.  That will do all the
+  configuring and building of all the packages.
+

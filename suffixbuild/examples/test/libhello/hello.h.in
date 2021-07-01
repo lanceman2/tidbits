@@ -1,0 +1,4 @@
+
+#define NAME "@NAME@"
+
+extern void hello(void);

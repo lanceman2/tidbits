@@ -1,0 +1,6 @@
+
+scriptdir="$(dirname ${BASH_SOURCE[0]})" || exit 1
+cd "$scriptdir" || exit 1
+
+@bindir@/hello || exit 1
+./hello/hello || exit 1

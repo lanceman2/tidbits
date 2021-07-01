@@ -1,0 +1,189 @@
+#!/bin/bash
+#
+# This file is meant to be sourced by other files like:
+# install_node, install_apachehttpd, install_ondemand, install_ruby
+#
+# We can also run it.
+#
+
+
+
+##########################################################################
+#  START  CONFIGURATION
+##########################################################################
+
+PREPREFIX=/usr/local/encap
+
+
+# mostly github repo tags
+
+ONDEMAND_TAG=v1.6.10
+
+#APRUTIL_TAG=1.6.1
+APRUTIL_TAG=1.6.1
+
+#APR_TAG=1.7.0
+APR_TAG=1.6.5
+
+#http://apache-http-server.18135.x6.nabble.com/mod-lua-and-subprocess-env-td5035290.html
+HTTPD_TAG=2.4.41 # May be r.subprocess_env buggy
+#HTTPD_TAG=2.4.25 # compile error in modules/mappers/
+#HTTPD_TAG=2.4.24  # compile error in modules/mappers/
+#HTTPD_TAG=2.4.22
+#HTTPD_TAG=2.4.34
+
+RUBY_TAG=2.6.4
+
+NODE_TAG=v6.17.1
+
+NGINX_TAG=1.16.1
+
+SLURM_TAG=slurm-19-05-2-1
+
+LUA_TAG=5.3.5 
+
+
+NGHTTP2_TAG=v1.39.2
+# This is a git submodule for nghttp2
+# so this must be consistent with NGHTTP2_TAG
+NEVERBLEED_TAG=5cf5da80b715223d2614374aec
+
+
+
+########## BELOW here not changed so often
+
+
+ONDEMAND_TARNAME=ondemand-$ONDEMAND_TAG
+
+ONDEMAND_PREFIX=$PREPREFIX/$ONDEMAND_TARNAME
+
+ONDEMAND_TARURL=https://github.com/OSC/ondemand/tarball/$ONDEMAND_TAG
+
+
+
+APRUTIL_TARNAME=apr-util-$APRUTIL_TAG
+
+APRUTIL_TARURL=https://github.com/apache/apr-util/tarball/$APRUTIL_TAG
+
+
+
+APR_TARNAME=apr-$APR_TAG
+
+APR_TARURL=https://github.com/apache/apr/tarball/$APR_TAG
+
+
+
+HTTPD_TARNAME=httpd-$HTTPD_TAG
+
+HTTPD_PREFIX=$PREPREFIX/$HTTPD_TARNAME
+
+HTTPD_TARURL=https://github.com/apache/httpd/tarball/$HTTPD_TAG
+
+
+
+RUBY_TARNAME=ruby-$RUBY_TAG
+
+RUBY_PREFIX=$PREPREFIX/$RUBY_TARNAME
+
+RUBY_TARURL=http://cache.ruby-lang.org/pub/ruby/2.6/ruby-2.6.4.tar.gz
+
+#this kept failing to build, and no instructions how to bootstrap
+#RUBY_TAG=v2_4_7
+#RUBY_TARURL=https://github.com/ruby/ruby/tarball/$RUBY_TAG
+
+
+
+NODE_TARNAME=node-$NODE_TAG
+
+NODE_PREFIX=$PREPREFIX/$NODE_TARNAME
+
+NODE_TARURL=https://github.com/nodejs/node/tarball/$NODE_TAG
+
+
+
+NGHTTP2_TARNAME=nghttp2-$NGHTTP2_TAG
+
+NGHTTP2_PREFIX=$PREPREFIX/$NGHTTP2_TARNAME
+
+NGHTTP2_TARURL=https://github.com/nghttp2/nghttp2/tarball/$NGHTTP2_TAG
+
+
+
+NEVERBLEED_TARNAME=neverbleed-$NEVERBLEED_TAG
+
+NEVERBLEED_PREFIX=$PREPREFIX/$NEVERBLEED_TARNAME
+
+NEVERBLEED_TARURL=https://github.com/tatsuhiro-t/neverbleed/tarball/$NEVERBLEED_TAG
+
+
+
+NGINX_TARNAME=nginx-$NGINX_TAG
+
+NGINX_PREFIX=$PREPREFIX/$NGINX_TARNAME
+
+NGINX_TARURL=https://nginx.org/download/nginx-1.16.1.tar.gz
+
+
+
+SLURM_TARNAME=$SLURM_TAG
+
+SLURM_PREFIX=$PREPREFIX/$SLURM_TARNAME
+
+SLURM_TARURL=https://github.com/SchedMD/slurm/tarball/$SLURM_TAG
+
+
+
+LUA_TARNAME=lua-$LUA_TAG
+
+LUA_PREFIX=$PREPREFIX/$LUA_TARNAME
+
+LUA_TARURL=http://www.lua.org/ftp/lua-$LUA_TAG.tar.gz
+
+
+##########################################################################
+#  END  CONFIGURATION
+##########################################################################
+
+NPROC=$(nproc||echo 5)
+
+
+if [ "$(basename ${BASH_SOURCE[0]})" = config ] &&\
+    [ -f my_config ] ; then
+    # override some or all of the variables above.
+    source my_config
+fi
+
+
+# Usage: GetTarball url tarname
+#
+# Example: GetTarball https://github.com/ruby/ruby/tarball/v2_4_7 ruby-v2_4_7
+#
+function GetTarball() {
+
+    #set -e # should be already set to terminate on error
+    # and
+    #set -o pipefail
+
+    # We download a tarball from the URL and rename the top source
+    # directory to $2, and then re-tar it fixing the top source directory
+    # name that it creates.
+
+    rm -rf ${2}
+
+    wget -O ${2}.tar.gz $1
+
+    if [ -f ${2}.tar.gz.sha512 ] ; then
+        sha512sum -c ${2}.tar.gz.sha512
+    else
+        sha512sum ${2}.tar.gz > ${2}.tar.gz.sha512
+    fi
+
+    tar -xzf ${2}.tar.gz --transform="s/^[^\/]*/${2}/"
+    rm ${2}.tar.gz
+    tar -cJf ${2}.tar.xz ${2}
+}
+
+while [ -n "$*" ] ; do
+    echo "${!1}"
+    shift 1
+done

@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# lots of bash run options:
+set -xEeuo pipefail
+
+cd $(dirname ${BASH_SOURCE[0]})
+
+topdir=$PWD
+
+source config
+
+
+rm -rf $NGHTTP2_TARNAME
+
+if [ ! -f $NGHTTP2_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $NGHTTP2_TARURL $NGHTTP2_TARNAME
+else
+    tar -xJf $NGHTTP2_TARNAME.tar.xz
+fi
+
+if [ ! -f $NEVERBLEED_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $NEVERBLEED_TARURL $NEVERBLEED_TARNAME
+fi
+
+
+# add sources from neverbleed
+cd $NGHTTP2_TARNAME/third-party
+tar -xJf $topdir/$NEVERBLEED_TARNAME.tar.xz
+mv $NEVERBLEED_TARNAME neverbleed
+cd $topdir/$NGHTTP2_TARNAME
+
+autoreconf -i
+
+./configure\
+ --prefix=${NGHTTP2_PREFIX}\
+ --enable-shared=no\
+ --enable-python-bindings=no\
+ --with-libxml2=no\
+ --with-jemalloc=no\
+ --with-spdylay=no\
+ --with-mruby=no\
+ --with-neverbleed=no\
+ --with-cython=no\
+ --with-boost=no
+
+make -j $NPROC
+make install
+
+# Particular to my system
+cat << EOF > $NGHTTP2_PREFIX/encap.exclude
+EOF
+
+
+set +x
+
+echo "---------------------------------------------------"
+echo -e "\nSUCCESSFULLY installed $NGHTTP2_TARNAME"
+echo -e "\n In ${NGHTTP2_PREFIX}\n"
+echo "---------------------------------------------------"

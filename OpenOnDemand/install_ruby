@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# lots of bash run options:
+set -xEeuo pipefail
+
+cd $(dirname ${BASH_SOURCE[0]})
+
+source config
+
+rm -rf $RUBY_TARNAME
+
+if [ ! -f $RUBY_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $RUBY_TARURL $RUBY_TARNAME
+else
+    tar -xJf $RUBY_TARNAME.tar.xz
+fi
+
+cd $RUBY_TARNAME
+autoconf -i -f
+# rdoc build is broken in this version
+./configure\
+ --prefix=${RUBY_PREFIX}
+
+make -j $NPROC
+make install
+
+
+# Particular to my system
+#cat << EOF > $RUBY_PREFIX/encap.exclude
+
+#EOF
+
+
+set +x
+
+echo "---------------------------------------------------"
+echo -e "\nSUCCESSFULLY installed $RUBY_TARNAME"
+echo -e "\n In ${RUBY_PREFIX}\n"
+echo "---------------------------------------------------"
+

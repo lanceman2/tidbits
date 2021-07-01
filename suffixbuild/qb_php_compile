@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# This uses PHP to generate files (likely HTML)
+# without a web server
+
+export LANG="en_US.UTF-8"
+
+function usage()
+{
+    cat 1>&2 << EOF
+ Usage: $0 INCLUDE_PATH INFILE OUTFILE
+
+ Runs the PHP binary on INFILE and then does
+ whatever else is needed to make a usable file.
+ Writes the compiled result to OUTFILE.
+
+ Note this adds the HTML5 header <!DOCTYPE html>,
+ then a <!--  comment --> and then the PHP output.
+EOF
+    exit 1
+}
+
+
+if [ -z "$3" ] || [ -n "$4" ] ; then
+    usage
+fi
+
+cat > $3 <<END
+<!DOCTYPE html>
+<!-- This file was generated from input file ${2}
+  by running: $0 $* -->
+END
+
+# I wish that PHP had a gcc like -Werror flag
+# TODO: add the -Werror like behavior with a PHP
+# preload php file
+
+if ! php \
+-d "include_path=$1" \
+-d display_startup_errors=On \
+-d "error_reporting=E_ALL|E_STRICT|E_NOTICE" \
+-d "variables_order=ESCGP" \
+-d "safe_mode_allowed_env_vars=PHP_" \
+$2 >> $3 ; then
+    rm -f $3
+    # spew to stderr
+    echo "PHP script $2 failed" 1>&2
+    exit 1
+fi
+

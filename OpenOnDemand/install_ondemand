@@ -1,0 +1,160 @@
+#!/bin/bash
+
+# lots of bash run options:
+set -xEeuo pipefail
+
+cd $(dirname ${BASH_SOURCE[0]})
+
+source config
+
+rm -rf $ONDEMAND_TARNAME
+
+if [ ! -f $ONDEMAND_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $ONDEMAND_TARURL $ONDEMAND_TARNAME
+else
+    tar -xJf $ONDEMAND_TARNAME.tar.xz
+fi
+
+
+export GEM_PATH=$ONDEMAND_PREFIX/gems
+export GEM_HOME=$GEM_PATH
+export PATH=$GEM_HOME/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+
+
+if [ ! -d $GEM_HOME ] ; then
+    mkdir -p $GEM_HOME
+
+    # This is so stupid.  There has got to be a better way
+    # to find these dependencies other than wanting for the
+    # next failure in running "rake build" below.
+    #
+    gem install rake -v 12.3.3
+    gem install bundler -v 2.0.2
+    gem install concurrent-ruby -v 1.1.5
+    gem install i18n -v 0.9.5
+    gem install minitest -v 5.11.3
+    gem install thread_safe -v 0.3.6
+    gem install ood_core -v 0.9.3
+    gem install tzinfo -v 1.2.5
+    gem install activesupport -v 4.2.11
+    gem install builder -v 3.2.3
+    gem install erubis -v 2.7.0
+    gem install mini_portile2 -v 2.4.0
+    gem install nokogiri -v 1.10.4
+    gem install rails-deprecated_sanitizer -v 1.0.3
+    gem install rails-dom-testing -v 1.0.9
+    gem install crass -v 1.0.4
+    gem install loofah -v 2.2.3
+    gem install rails-html-sanitizer -v 1.2.0
+    gem install actionview -v 4.2.11
+    gem install rack -v 1.6.11
+    gem install rack-test -v 0.6.3
+    gem install actionpack -v 4.2.11
+    gem install globalid -v 0.4.2
+    gem install activejob -v 4.2.11
+    gem install mini_mime -v 1.0.1
+    gem install mail -v 2.7.1
+    gem install actionmailer -v 4.2.11
+    gem install activemodel -v 4.2.11
+    gem install arel -v 6.0.4
+    gem install activerecord -v 4.2.11
+    gem install public_suffix -v 3.0.3
+    gem install addressable -v 2.6.0
+    gem install execjs -v 2.7.0
+    gem install autoprefixer-rails -v 8.6.5
+    gem install ffi -v 1.10.0
+    gem install sassc -v 2.0.1
+    gem install bootstrap-sass -v 3.4.1
+    gem install bootstrap_form -v 2.7.0
+    gem install browser -v 2.5.3
+    gem install byebug -v 11.0.1
+    gem install coffee-script-source -v 1.12.2
+    gem install coffee-script -v 2.4.1
+    gem install thor -v 0.19.1
+    gem install railties -v 4.2.11
+    gem install coffee-rails -v 4.1.1
+    gem install data-confirm-modal -v 1.6.2
+    gem install dotenv -v 2.7.2
+    gem install dotenv-rails -v 2.7.2
+    gem install dotiw -v 4.0.1
+    gem install rb-fsevent -v 0.10.3
+    gem install rb-inotify -v 0.10.0
+    gem install sass-listen -v 4.0.0
+    gem install sass -v 3.7.3
+    gem install font-awesome-sass -v 5.0.9
+    gem install multi_json -v 1.13.1
+    gem install jbuilder -v 2.8.0
+    gem install jquery-rails -v 4.3.5
+    gem install sprockets -v 3.7.2
+    gem install sprockets-rails -v 3.2.1
+    gem install tilt -v 2.0.9
+    gem install sass-rails -v 5.0.7
+    gem install jquery-datatables-rails -v 3.4.0
+    gem install json -v 1.8.6
+    gem install request_store -v 1.4.1
+    gem install lograge -v 0.10.0
+    gem install metaclass -v 0.0.4
+    gem install mocha -v 1.8.0
+    gem install rails -v 4.2.11
+    gem install redcarpet -v 3.4.0
+    gem install ood_appkit -v 1.0.3
+    gem install pbs -v 2.2.1
+    gem install rails_serve_static_assets -v 0.0.5
+    gem install rails_stdout_logging -v 0.0.5
+    gem install rails_12factor -v 0.0.3
+    gem install rdoc -v 4.3.0
+    gem install sdoc -v 0.4.2
+    gem install spring -v 2.0.2
+    gem install uglifier -v 4.1.20
+    gem install globalid -v 0.4.1
+    gem install addressable -v 2.5.2
+    gem install autoprefixer-rails -v 6.7.7.2
+    gem install ffi -v 1.9.25
+    gem install sassc -v 2.0.0
+    gem install thor -v 0.20.3
+    gem install coffee-rails -v 4.0.1
+    gem install dotenv -v 2.5.0
+    gem install dotenv-rails -v 2.5.0
+    gem install font-awesome-sass -v 5.6.1
+    gem install jbuilder -v 1.5.3
+    gem install rdoc -v 6.0.4
+    gem install sass -v 3.7.2
+    gem install sdoc -v 1.0.0
+    gem install coffee-rails -v 4.2.2
+    gem install font-awesome-sass -v 4.7.0
+    gem install ood_cluster -v 0.0.1
+    gem install byebug -v 10.0.2
+    gem install font-awesome-sass -v 4.4.0
+    gem install jquery-datatables-rails -v 3.3.0
+    gem install js-routes -v 1.2.9
+    gem install local_time -v 1.0.3
+    gem install mustache -v 1.1.0
+    gem install osc-machete -v 1.2.2
+    gem install osc_machete_rails -v 1.2.2
+    gem install sqlite3 -v 1.3.13
+fi
+
+
+cd $ONDEMAND_TARNAME
+export PREFIX=$ONDEMAND_PREFIX
+
+rake build
+rake install
+
+# Particular to my system
+cat << EOF > $ONDEMAND_PREFIX/encap.exclude
+apps
+mod_ood_proxy
+nginx_stage
+ood_auth_map
+ood-portal-generator
+EOF
+
+
+set +x
+
+echo "---------------------------------------------------"
+echo -e "\nSUCCESSFULLY installed $ONDEMAND_TARNAME"
+echo -e "\n In $ONDEMAND_PREFIX\n"
+echo "---------------------------------------------------"

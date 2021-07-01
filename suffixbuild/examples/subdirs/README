@@ -1,0 +1,6 @@
+This example is testing the setting of SUBDIRS
+in qb.make.  When quickbuild is run the qb.make
+is parsed by running GNU make with a temp test
+GNUmakefile and prints the SUBDIRS value.
+If SUBDIRS was not set it does other things to
+see if there are subdirectories.

@@ -1,0 +1,16 @@
+
+def set_package_info (info, option)
+
+###########################################################################
+#                     PACKAGE RELEASE CONFIGURATION
+###########################################################################
+
+
+
+# don't include examples/ in the quickbuild package
+# examples are for using with the installed package
+info[:SKIP_DIRS] = [ 'foo*' , 'hello_*', 'skip*' ]
+
+
+end
+

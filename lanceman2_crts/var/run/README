@@ -1,0 +1,4 @@
+
+We keep UHD lock files in this directory.  These lock file come and go are
+CRTS programs run and exit.
+

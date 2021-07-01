@@ -1,0 +1,52 @@
+I/O input and output in a single module that provides a regular networked
+socket interface for another program, like firefox, apache, netcat, and
+so on.
+
+This directory contains source code to crts_radio modules that provide
+both input to the USRP (Universal Software Radio Peripheral) transmitter
+and output from the USRP receiver.  There is a single UNIX file descriptor
+the USRP reads and writes.  The underlying file transport is called
+full-duplex.  The kernel keeps separate input and output to and from each
+file descriptor, like having two independent channels, input and output.
+
+obvious GNU/Linux I/O modules
+
+ - TCP/IP sockets (either listening or client like)
+
+     * tcpL
+     * tcpC
+
+ - UDP/IP sockets (either listening or client like)
+
+     * udpL
+     * udpC
+
+ - TUN device connected to IP socket(s)
+
+     * tun
+
+ - UNIX domain sockets (either listening or client like)
+
+     * unixL
+     * unixC
+
+ FIFO (named pipes) are not bi-directional, they have only one channel.
+ Regular files can only act as a single channel.
+
+
+
+
+
+ - General (Linux) epoll (see name epoll) collection of I/O file
+   descriptors.  Epoll is like select on steroids.
+
+    It's hard to say that a USRP wants a mix of different inputs and
+    outputs from a collection of file descriptors, all interleaved.  The
+    crts_radio could transmit, on the air, all the data read as it comes
+    in.  The crts_radio could write all data that it receives on the air.
+
+
+
+
+
+https://en.wikipedia.org/wiki/Universal_Software_Radio_Peripheral

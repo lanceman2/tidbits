@@ -1,0 +1,17 @@
+--TODO--
+
+decrease pthread stack size.
+
+add service performance test to see if threads really help.
+
+start HTTP code
+
+fix return types that are not used to void.
+
+
+Stabilize interfaces and then separate tests into separate directory
+and make a client API.  Add more test programs.  Automate the running
+of tests.
+
+
+--END TODO--

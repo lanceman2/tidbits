@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+
+
+# If python import path is a problem:
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
+
+
+import mod
+
+
+#print("hello")
+
+#print(mod)
+#print(mod.magic)
+print(mod.magic(3, 4))
+#print([4, "foo", { "bar", 5, 6 } ])
+
+# print primitives
+mod.white(12)
+mod.white(None)
+mod.white("hello")
+
+# print lists/tuples
+mod.white([1,2,None,"white","black",])
+mod.white((1,2,None,"white","black",))
+
+# print more complex dictionary types
+mod.white({'a':12, 'b':88, 'c':[1,2,3,4,], 'd':{'white':'white'}})
+
+# variable number of arguments
+mod.rabbit(0)
+mod.rabbit(0,1)
+mod.rabbit(0,1,2,3,4,5)
+
+# print with a mix of values
+mod.rabbit(0,1,2,"wonderland",{'a':1, 'b':2}, ("this","is","a","tuple"))
+
+'''
+
+# I want magic to take any number and type of arguments.
+
+# this will fail.  I'd like the mod.magic() to be able to
+# handle any arguments.
+print(mod.magic(3, 4, 5))
+
+# I want magic to work with any arguments:
+print(mod.magic([4, "foo", { "bar", 5, 6 } ], "cake", "pie"))
+'''

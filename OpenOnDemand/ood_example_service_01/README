@@ -1,0 +1,7 @@
+This directory and all it's subdirectories contains an attempt to run an
+example of the Open OnDemand service.  It's more particular then the
+installation scripts in the above directory.  This service example also
+depends on some of the files in the directory above, in order to get some
+of the particulars of the installed softwares that this service depends
+on; like ONDEMAND_PREFIX from ../config.
+

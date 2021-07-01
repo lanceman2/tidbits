@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# lots of bash run options:
+set -xEeuo pipefail
+
+cd $(dirname ${BASH_SOURCE[0]})
+
+source config
+
+
+rm -rf $SLURM_TARNAME
+
+if [ ! -f $SLURM_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $SLURM_TARURL $SLURM_TARNAME
+else
+    tar -xJf $SLURM_TARNAME.tar.xz
+fi
+
+cd $SLURM_TARNAME
+
+
+./configure\
+ --prefix=${SLURM_PREFIX}
+
+make -j $NPROC
+make install
+
+set +x
+
+echo "---------------------------------------------------"
+echo -e "\nSUCCESSFULLY installed $SLURM_TARNAME"
+echo -e "\n In ${SLURM_PREFIX}\n"
+echo "---------------------------------------------------"

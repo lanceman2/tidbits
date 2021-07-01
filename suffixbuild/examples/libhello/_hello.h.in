@@ -1,0 +1,2 @@
+/* interfaces to libhello */
+extern void hello(void);

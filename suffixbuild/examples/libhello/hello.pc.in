@@ -1,0 +1,20 @@
+prefix=@prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+
+homepage=@PACKAGE_URL@
+
+about=@NAME@ version: @VERSION@
+
+###################################
+# standard pkg-config options
+Name: @NAME@
+Description: @PACKAGE_NAME@
+Version: @VERSION@
+Homepage: @PACKAGE_URL@
+URL: @PACKAGE_URL@
+Requires:
+Libs: -Wl,-rpath -Wl,${libdir} -L${libdir} -lhello
+Cflags: -I${includedir}
+

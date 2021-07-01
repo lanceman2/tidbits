@@ -1,0 +1,7 @@
+
+#define PO_DEBUG
+#define PO_ASSERT_TERMINAL
+#define PO_ELOG_DEBUG
+
+#define PO_SERVER_MAX_CONNECTIONS  5
+

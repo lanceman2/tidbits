@@ -1,0 +1,20 @@
+This directory is here so that the plugins/ directory is in a crts/
+subdirectory and the binary executables may find plugin module files with
+a relative path.
+
+Example: the program crts_radio gets installed in
+
+   PREFIX/bin/crts_radio
+
+and all the RadioInput modules get installed in
+
+   PREFIX/share/crts/plugins/RadioInput/
+
+which is a very standard arrangement that many packages use; that is:
+PREFIX/share/PACKAGE_NAME/plugins/PLUGIN_CATEGORY/.  We keep the source
+with this same directory structure so that the uninstalled programs can
+run in the build directories and use the same relative path to find the
+plugin files.
+
+See for yourself, on a GNU/Linux system, run 'locate plugins' and see the
+output.  This is at least a de facto standard.

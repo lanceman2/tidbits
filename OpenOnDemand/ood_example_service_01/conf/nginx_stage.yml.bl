@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -ex
+
+source ../config
+
+cd ..
+ROOTDIR=${PWD}
+cd -
+
+
+sed\
+ -e "s!@ONDEMAND_PREFIX@!${ONDEMAND_PREFIX}!g"\
+ -e "s!@HOSTNAME@!${HOSTNAME}!g"\
+ -e "s!@ROOTDIR@!${ROOTDIR}!g"\
+ -e "s!@NGINX_PREFIX@!${NGINX_PREFIX}!g"\
+ -e "s!@NODE_PREFIX@!${NODE_PREFIX}!g"\
+ nginx_stage.ymlin > nginx_stage.yml

@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# This script installs librtlsdr from a tagged github.com repository.
+
+#https://github.com/libusb/libusb.git
+
+tag=v1.0.23
+tarname=libusb-$tag
+
+set -exo pipefail
+
+#cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+url=https://github.com/libusb/libusb/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    v1.0.23)
+        sha512sum=513d5b31ff0772d21a8293454197f5\
+45b8021d8524f37cdc549a9d5af4df5f5aa1c337efad36eb\
+00e8668ec3e081d45547572fa4cce69eabcc9d7270405e4a84
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+./bootstrap.sh
+CFLAGS="-Wall -g" ./configure --prefix=$prefix
+make $make_opts
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+EOF
+

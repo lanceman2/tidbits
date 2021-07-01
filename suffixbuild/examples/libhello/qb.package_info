@@ -1,0 +1,35 @@
+# this is a ruby file that sets info about this libhello package
+
+def set_package_info (info, option)
+
+
+# VERSION is added as a suffix in the tarball "release" filename
+
+info[:VERSION] = '0.1.1'
+
+
+# The package name
+
+info[:NAME] = 'libhello'
+
+
+# The package URL or homepage
+
+info[:URL] = 'https://github.com/lanceman2/quickbuild.git'
+
+
+# The package description
+
+info[:DESCRIPTION] = 'a C library that prints hello world'
+
+
+# default CFLAGS
+
+ENV['CFLAGS'] = '-g -Wall -Werror' unless ENV['CFLAGS']
+
+
+# You could add lots more ...
+
+
+end
+

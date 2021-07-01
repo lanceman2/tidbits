@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# lots of bash run options:
+set -xEeuo pipefail
+
+cd $(dirname ${BASH_SOURCE[0]})
+
+source config
+
+
+rm -rf $NGINX_TARNAME
+
+if [ ! -f $NGINX_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $NGINX_TARURL $NGINX_TARNAME
+else
+    tar -xJf $NGINX_TARNAME.tar.xz
+fi
+
+cd $NGINX_TARNAME
+
+
+./configure\
+ --prefix=${NGINX_PREFIX}
+
+make -j $NPROC
+make install
+
+# Particular to my system
+cat << EOF > $NGINX_PREFIX/encap.exclude
+conf
+html
+logs
+EOF
+
+
+set +x
+
+echo "---------------------------------------------------"
+echo -e "\nSUCCESSFULLY installed $NGINX_TARNAME"
+echo -e "\n In ${NGINX_PREFIX}\n"
+echo "---------------------------------------------------"

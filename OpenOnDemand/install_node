@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# lots of bash run options:
+set -xEeuo pipefail
+
+cd $(dirname ${BASH_SOURCE[0]})
+
+source config
+
+
+rm -rf $NODE_TARNAME
+
+if [ ! -f $NODE_TARNAME.tar.xz ] ; then
+    # Usage: GetTarball url tarname
+    GetTarball $NODE_TARURL $NODE_TARNAME
+else
+    tar -xJf $NODE_TARNAME.tar.xz
+fi
+
+cd $NODE_TARNAME
+./configure --prefix=${NODE_PREFIX}
+make -j $NPROC
+make install
+
+# Particular to my system
+cat << EOF > $NODE_PREFIX/share/encap.exclude
+systemtap
+EOF
+
+
+set +x
+
+echo "---------------------------------------------------"
+echo -e "\nSUCCESSFULLY installed $NODE_TARNAME"
+echo -e "\n In ${NODE_PREFIX}\n"
+echo "---------------------------------------------------"

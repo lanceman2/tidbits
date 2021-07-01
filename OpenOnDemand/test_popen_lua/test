@@ -1,0 +1,14 @@
+#!/usr/bin/lua5.3
+
+
+function run(cmd)
+  cmd = "FOO=bar FOO2=bar2222222222222222222222222222222222222222222222222 " .. cmd
+  print("cmd=", cmd)
+  local handle = io.popen(cmd, "r")
+  local output = handle:read("*a")
+  handle:close()
+  print("output=" , output)
+end
+
+run("env")
+

@@ -1,0 +1,52 @@
+# this is a ruby file that sets info about this package
+
+def set_package_info (info, option)
+
+
+    # VERSION is added as a suffix in the tarball "release" filename
+
+    info[:VERSION] = '0.1'
+
+
+    # The package name
+
+    info[:NAME] = 'potato'
+
+
+    # The package URL or homepage
+
+    info[:URL] = 'https://github.com/lanceman2/potato.git'
+
+
+    # The package description
+
+    info[:DESCRIPTION] = 'a form service'
+
+
+    # default CFLAGS
+
+    ENV['CFLAGS'] = '-g -Wall -Werror' unless ENV['CFLAGS']
+    
+    if ENV['CPPFLAGS']
+        ENV['CPPFLAGS'] = '-D_GNU_SOURCE ' + ENV['CPPFLAGS']
+    else
+        ENV['CPPFLAGS'] = '-D_GNU_SOURCE'
+    end
+
+
+
+
+    # adding package build options
+    bool = option[:bool]
+    
+    #path = option[:path]
+
+
+    # bool options that are false do not get defined in the make files
+
+    #     name       default   description
+    bool[:test] = [ true,     'adds additional testing programs' ]
+
+
+end
+

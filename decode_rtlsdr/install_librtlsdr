@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# This script installs librtlsdr from a tagged github.com repository.
+
+tag=0.6.0
+tarname=librtlsdr-$tag
+
+set -exo pipefail
+
+#cd "$(dirname ${BASH_SOURCE[0]})"
+
+try=0
+tarnameTry=$tarname-try-$try
+while [ -d "${tarnameTry}" ] ; do
+    let try=$try+1
+    tarnameTry=$tarname-try-$try
+done
+builddir="${tarnameTry}"
+
+#https://github.com/steve-m/librtlsdr.git
+
+url=https://github.com/steve-m/librtlsdr/tarball/$tag
+
+prefix=/usr/local/encap/$tarnameTry
+
+tarfile=$tarname.tar.gz
+
+sha512sum=
+
+case "$tag" in
+    0.6.0)
+        sha512sum=1be60235af9578c767e9bb\
+5a858ce668d3e89eeb99fcb7516983cf80d03289\
+6e32359180a3ac7d72c82d5d79b3b60ee7dd3e86\
+f94c6567b2ebb616c87857d558
+        ;;
+esac
+
+
+if [ ! -e "$tarfile" ] ; then
+    wget $url -O $tarfile
+fi
+
+if [ -n "$sha512sum" ] ; then
+    echo "$sha512sum  $tarfile" | sha512sum -c -
+else
+    set +x
+    sha512sum $tarfile
+    set -x
+fi
+
+mkdir "$builddir"
+cd "$builddir"
+tar --strip-components=1 -xzf ../$tarfile
+
+autoreconf -i
+
+# We need to use the libusb from /usr/local
+
+PKG_CONFIG_PATH=/usr/local/lib/pkgconfig\
+ CFLAGS="-g -Wall"\
+ ./configure\
+ --prefix=$prefix\
+ --enable-driver-detach\
+ --with-sysroot=/usr/local
+
+make $make_opts
+make install
+
+cd -
+
+set +x
+
+cat << EOF
+
+   SUCCESSFULLY installed $tarname in $prefix
+
+   Consider running: cd $builddir && sudo make install-udev-rules
+
+  Also:
+
+    sudo dmesg
+
+    Plug in the RTL SDR into a USB slot
+
+    sudo dmesg
+
+    rtl_fm -f 89100000  -s 200000 -r 20000 - | play -r 20000 -t s16 -L -c 1  - 1>&  /dev/null
+
+    ... and the like.
+
+EOF
+
